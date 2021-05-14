@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - development
+      - develop
   release:
     types: [published]
   pull_request:
@@ -63,7 +63,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: 'Deploy safe-apps-developer-ui to S3: Develop'
-        if: github.ref == 'refs/heads/development'
+        if: github.ref == 'refs/heads/develop'
         run: aws s3 sync build s3://${{ secrets.AWS_DEV_BUCKET_NAME }} --delete
 
       - name: 'Deploy safe-apps-developer-ui to S3: Staging'
