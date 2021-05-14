@@ -2,16 +2,13 @@ name: Developer UI CI
 on:
   push:
     branches:
-      - master
+      - main
       - development
-    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths
-    paths:
-      - 'packages/safe-apps-developer-ui/**'
   release:
     types: [published]
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -70,7 +67,7 @@ jobs:
         run: aws s3 sync build s3://${{ secrets.AWS_DEV_BUCKET_NAME }}/safe-apps-developer-ui --delete
 
       - name: 'Deploy safe-apps-developer-ui to S3: Staging'
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: aws s3 sync build s3://${{ secrets.AWS_STAGING_BUCKET_NAME }}/current/safe-apps-developer-ui --delete
 
       - name: 'Prepare safe-apps-developer-ui for deploy to Production'
