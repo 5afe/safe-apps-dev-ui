@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - development
+      - develop
   release:
     types: [published]
   pull_request:
@@ -63,16 +63,16 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: 'Deploy safe-apps-developer-ui to S3: Develop'
-        if: github.ref == 'refs/heads/development'
-        run: aws s3 sync build s3://${{ secrets.AWS_DEV_BUCKET_NAME }}/safe-apps-developer-ui --delete
+        if: github.ref == 'refs/heads/develop'
+        run: aws s3 sync build s3://${{ secrets.AWS_DEV_BUCKET_NAME }} --delete
 
       - name: 'Deploy safe-apps-developer-ui to S3: Staging'
         if: github.ref == 'refs/heads/main'
-        run: aws s3 sync build s3://${{ secrets.AWS_STAGING_BUCKET_NAME }}/current/safe-apps-developer-ui --delete
+        run: aws s3 sync build s3://${{ secrets.AWS_STAGING_BUCKET_NAME }}/current --delete
 
       - name: 'Prepare safe-apps-developer-ui for deploy to Production'
         if: startsWith(github.ref, 'refs/tags/v')
-        run: aws s3 sync build s3://${{ secrets.AWS_STAGING_BUCKET_NAME }}/releases/${{ github.event.release.tag_name }}/safe-apps-developer-ui --delete
+        run: aws s3 sync build s3://${{ secrets.AWS_STAGING_BUCKET_NAME }}/releases/${{ github.event.release.tag_name }} --delete
 
       - name: 'Production deployment: Enable production deployment'
         if: success() && startsWith(github.ref, 'refs/tags/v')
