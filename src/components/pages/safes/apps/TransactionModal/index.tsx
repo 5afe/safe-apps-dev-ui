@@ -171,6 +171,7 @@ const TransactionModal = ({
               onClose?.(e, 'escapeKeyDown');
               onUserConfirm?.(safeTxHash);
             } catch (err) {
+              console.error(err);
               onClose?.(e, 'escapeKeyDown');
               onUserReject?.();
             }
