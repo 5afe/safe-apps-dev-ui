@@ -1,6 +1,6 @@
 import { ZERO_ADDRESS } from 'src/utils/strings';
 import { SignedProposedTx } from './../types/transaction';
-import { Transaction } from '@gnosis.pm/safe-apps-sdk';
+import { BaseTransaction } from '@gnosis.pm/safe-apps-sdk';
 import { ethers } from 'ethers';
 import { getSafeContract, getMultiSendContract } from 'src/api/safeContracts';
 import { ProposedTx, CreateTransactionArgs } from 'src/types/transaction';
@@ -108,7 +108,7 @@ const createTransaction = async (
 const encodeMultiSendCall = (
   signer: ethers.providers.JsonRpcSigner,
   multiSendAddress: string,
-  txs: Transaction[],
+  txs: BaseTransaction[],
 ): string => {
   const multiSend = getMultiSendContract(multiSendAddress, signer);
 

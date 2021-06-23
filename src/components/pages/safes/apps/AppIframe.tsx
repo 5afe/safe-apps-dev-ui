@@ -4,9 +4,10 @@ import { useRouteMatch } from 'react-router';
 import {
   RequestId,
   RPCPayload,
-  Transaction,
-  SendTransactionsArgs,
-  SendTransactionParams,
+  BaseTransaction,
+  SendTransactionsParams,
+  SendTransactionRequestParams,
+  Methods,
 } from '@gnosis.pm/safe-apps-sdk';
 import { useProviderStore } from 'src/stores/provider';
 import { TransactionModal } from 'src/components/pages/safes/apps/TransactionModal';
@@ -21,9 +22,9 @@ const SIframe = styled.iframe`
 `;
 
 type ProposedTxs = {
-  transactions: Transaction[];
+  transactions: BaseTransaction[];
   requestId: RequestId;
-  params: SendTransactionParams;
+  params: SendTransactionRequestParams;
 };
 
 const AppIframe = ({ url, app }: { url: string; app: SafeApp }): React.ReactElement => {
@@ -36,14 +37,14 @@ const AppIframe = ({ url, app }: { url: string; app: SafeApp }): React.ReactElem
   } = useRouteMatch<{ safeAddress: string }>();
 
   React.useEffect(() => {
-    communicator?.on('getSafeInfo', () => ({
+    communicator?.on(Methods.getSafeInfo, () => ({
       safeAddress,
       network: getNetworkNameByChainId(chainId),
       chainId,
     }));
 
-    communicator?.on('sendTransactions', (msg) => {
-      const params = msg.data.params as SendTransactionsArgs;
+    communicator?.on(Methods.sendTransactions, (msg) => {
+      const params = msg.data.params as SendTransactionsParams;
 
       setProposedTxs({
         transactions: params.txs,
@@ -52,7 +53,7 @@ const AppIframe = ({ url, app }: { url: string; app: SafeApp }): React.ReactElem
       });
     });
 
-    communicator?.on('rpcCall', async (msg) => {
+    communicator?.on(Methods.rpcCall, async (msg) => {
       const params = msg.data.params as RPCPayload;
 
       try {

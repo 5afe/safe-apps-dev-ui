@@ -3,10 +3,9 @@ import {
   getSDKVersion,
   SDKMessageEvent,
   MethodToResponse,
-  Methods,
   ErrorResponse,
   MessageFormatter,
-  METHODS,
+  Methods,
   RequestId,
 } from '@gnosis.pm/safe-apps-sdk';
 import { SafeApp } from 'src/types/apps';
@@ -35,7 +34,7 @@ class AppCommunicator {
     // @ts-expect-error .parent doesn't exist on some possible types
     const sentFromIframe = msg.source.parent === window.parent;
     const knownOrigin = this.app.url.includes(msg.origin);
-    const knownMethod = Object.values(METHODS).includes(msg.data.method);
+    const knownMethod = Object.values(Methods).includes(msg.data.method);
 
     return knownOrigin && sentFromIframe && knownMethod;
   };

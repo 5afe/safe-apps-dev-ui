@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
-import { Transaction } from '@gnosis.pm/safe-apps-sdk';
+import { BaseTransaction } from '@gnosis.pm/safe-apps-sdk';
 
-const isTxValid = (t: Transaction): boolean => {
+const isTxValid = (t: BaseTransaction): boolean => {
   if (!['string', 'number'].includes(typeof t.value)) {
     return false;
   }
