@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ethers } from 'ethers';
-import { SendTransactionParams, Transaction } from '@gnosis.pm/safe-apps-sdk';
+import { SendTransactionRequestParams, BaseTransaction } from '@gnosis.pm/safe-apps-sdk';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Backdrop from '@material-ui/core/Backdrop';
 import Grid from '@material-ui/core/Grid';
@@ -62,9 +62,9 @@ const ButtonContainer = styled.div`
 `;
 
 type Props = Omit<ModalProps, 'children'> & {
-  txs: Transaction[];
+  txs: BaseTransaction[];
   app: SafeApp;
-  params?: SendTransactionParams;
+  params?: SendTransactionRequestParams;
   safeAddress: string;
   onUserConfirm?: (safeTxHash: string) => void;
   onUserReject?: () => void;
@@ -89,7 +89,7 @@ const TransactionModal = ({
     state.account,
   ]);
   const multiSendAddress = useContractsStore((state) => state.contracts[chainId].multiSend);
-  const [openedTransaction, setOpenedTransaction] = React.useState<Transaction | null>(null);
+  const [openedTransaction, setOpenedTransaction] = React.useState<BaseTransaction | null>(null);
 
   const txRecipient = React.useMemo(
     () => (isMultiSend ? multiSendAddress : txs[0]?.to),
@@ -171,6 +171,7 @@ const TransactionModal = ({
               onClose?.(e, 'escapeKeyDown');
               onUserConfirm?.(safeTxHash);
             } catch (err) {
+              console.error(err);
               onClose?.(e, 'escapeKeyDown');
               onUserReject?.();
             }
